@@ -149,18 +149,23 @@ def select_device():
 	dev = find_dev(supported_devices_connected[selectedDevice-1][1], supported_devices_connected[selectedDevice-1][3])
 	return dev, supported_devices_connected[selectedDevice-1]
 					
-def external_input(brightness, color):
+def external_input(brightness, color, mode):
 	dev = find_dev(0x1038, 0x1622)
 	device_params_default = supported_devices[1]
 	detach_device_driver(dev, device_params_default[4])
-	set_static_single_color_SSA3TKL(dev, device_params_default, brightness, color)
+	if mode == 1:
+		set_static_single_color_SSA3TKL(dev, device_params_default, brightness, color)
+	elif mode == 2:
+		pass
+	elif mode == 3:
+		set_rainbow_wave_SSA3TKL(dev, device_params_default, brightness)
 	usb.util.dispose_resources(dev)
 	attach_device_driver(dev, device_params_default[4])
 	
 def main():
 	print("Welcome to an RGB controller written in Python!")
 	
-	dev, dev_params = select_device()
+	dev, ddevice_params = select_device()
 
 	#Must ensure the device is not attached otherwise an error will be raised (resource busy)
 	#Only need to pass bInterfaceNumber, hence not passing the entire list for dev_params
@@ -171,20 +176,20 @@ def main():
 	
 	if mode == 1:
 		color = get_user_input_color()
-		set_static_single_color_SSA3TKL(dev, dev_params, brightness, color)
+		set_static_single_color_SSA3TKL(dev, device_params, brightness, color)
 	elif mode == 2:
 		color = ''
 		for i in range(8):
 			color = color + get_user_input_color()
-		set_static_multi_color_SSA3TKL(dev, dev_params, brightness, color)
+		set_static_multi_color_SSA3TKL(dev, device_params, brightness, color)
 	elif mode == 3:
-		set_rainbow_wave_SSA3TKL(dev, dev_params, brightness)
+		set_rainbow_wave_SSA3TKL(dev, device_params, brightness)
 			
 	#free up the device resource to proceed.
 	usb.util.dispose_resources(dev)
 	
 	#re-attaching the device to allow other programs to control it.
-	attach_device_driver(dev,dev_params[4])
+	attach_device_driver(dev,device_params[4])
 	
 	sys.exit()
 	
