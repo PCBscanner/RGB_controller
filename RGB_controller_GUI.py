@@ -18,7 +18,7 @@ def create_input_frame(container):
 
 	ttk.Button(frame, text='Choose color', command=lambda: select_color(color_entry)).grid(column=2, row=1)
 	
-	ttk.Button(frame, text='Update RGB', command=lambda: RGB_controller.default(brightness_entry.get(), color_entry.get())).grid(row=2, columnspan=3)
+	ttk.Button(frame, text='Update RGB', command=lambda: RGB_controller.external_input(brightness_entry.get(), color_entry.get())).grid(row=2, columnspan=3)
 	
 	for widget in frame.winfo_children():
 		widget.grid(padx=5, pady=5)

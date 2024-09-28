@@ -146,11 +146,10 @@ def select_device():
 				print(f"{i}: {supported_device[0]} {supported_device[2]}")
 				supported_devices_connected.append(supported_device) 
 	selectedDevice = int(input("Select which device you wish to control: "))
-	time.sleep(1)
 	dev = find_dev(supported_devices_connected[selectedDevice-1][1], supported_devices_connected[selectedDevice-1][3])
 	return dev, supported_devices_connected[selectedDevice-1]
 					
-def default(brightness, color):
+def external_input(brightness, color):
 	dev = find_dev(0x1038, 0x1622)
 	device_params_default = supported_devices[1]
 	detach_device_driver(dev, device_params_default[4])
