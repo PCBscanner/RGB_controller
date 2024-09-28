@@ -1,0 +1,3 @@
+# This file is used to ignore the files that should not be pushed to the repo.
+
+__pycache__

@@ -6,15 +6,10 @@ import usb.util
 import binascii
 import time
 
-supportedDevices = [['Vendor', 'Vendor ID', 'Product', 'Product ID', 'bInterfaceNumber', 'bmRequestType', 'bmRequest', 'wValue', 'wIndex']]
-supportedDevices.append(['SteelSeries', 0x1038, 'Apex 3 TKL', 0x1622, 0x1, 0x21, 0x9, 0x0200, 0x1])
+supported_devices = [['Vendor', 'Vendor ID', 'Product', 'Product ID', 'bInterfaceNumber', 'bmRequestType', 'bmRequest', 'wValue', 'wIndex']]
+supported_devices.append(['SteelSeries', 0x1038, 'Apex 3 TKL', 0x1622, 0x1, 0x21, 0x9, 0x0200, 0x1])
 
-#defaults
-colour_default = 'ff4500'
-brightness_default = 10
-deviceParams_default = supportedDevices[1]
-
-def detachDeviceDriver(dev, intf):
+def detach_device_driver(dev, intf):
 	#detaching the device driver if it is busy
 	if dev.is_kernel_driver_active(intf):
 		print("Kernel driver is attached for interface {0}. Attempting to detach...".format(intf))
@@ -27,7 +22,7 @@ def detachDeviceDriver(dev, intf):
 	else:
 		print("Kernel driver is not attached for interface {0}.".format(intf))
 
-def attachDeviceDriver(dev, intf):
+def attach_device_driver(dev, intf):
 	#attaching the device driver
 	if not dev.is_kernel_driver_active(intf):
 		print("Kernel driver is not attached for interface {0}. Attempting to attach...".format(intf))
@@ -40,7 +35,7 @@ def attachDeviceDriver(dev, intf):
 	else:
 		print("Kernel driver is already attached for interface {0}.".format(intf))			
 
-def findDev(idVendor, idProduct):
+def find_dev(idVendor, idProduct):
 	print("Finding the device...")
 	dev = usb.core.find(idVendor=idVendor, idProduct=idProduct)
 	#raising an error if the target device is not found
@@ -50,64 +45,64 @@ def findDev(idVendor, idProduct):
 		print("Found device!")
 		return dev
 
-def setStaticSingleColour_SSA3TKL(dev, devParams, brightness, colour):
-	print("Setting a single static colour...")
-	bmRequestType = devParams[5]
-	bmRequest = devParams[6]
-	wValue = devParams[7]
-	wIndex = devParams[8]
-	#inserting the colour value into the correct format for the device
-	dataColour = '21ff' + colour + colour + colour + colour + colour + colour + colour + colour
-	dataColour = dataColour + '0000000000000000000000000000000000000000000000000000000000000000000000000000'
-	#sending the colour data to the device
-	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(dataColour))
+def set_static_single_color_SSA3TKL(dev, dev_params, brightness, color):
+	print("Setting a single static color...")
+	bmRequestType = dev_params[5]
+	bmRequest = dev_params[6]
+	wValue = dev_params[7]
+	wIndex = dev_params[8]
+	#inserting the color value into the correct format for the device
+	data_color = '21ff' + color + color + color + color + color + color + color + color
+	data_color = data_color + '0000000000000000000000000000000000000000000000000000000000000000000000000000'
+	#sending the color data to the device
+	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data_color))
 	#inserting the brightness value into the correct format for the device
-	dataBrightness = '23' + str(brightness).zfill(2)
-	dataBrightness = dataBrightness + '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+	data_brightness = '23' + str(brightness).zfill(2)
+	data_brightness = data_brightness + '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 	#sending the brightness data to the device
-	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(dataBrightness))
+	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data_brightness))
 	print("Data has been sent!")
 
-def setStaticMultiColour_SSA3TKL(dev, devParams, brightness, colour):
-	print("Setting a static colour...")
-	bmRequestType = devParams[5]
-	bmRequest = devParams[6]
-	wValue = devParams[7]
-	wIndex = devParams[8]
-	#inserting the colour value into the correct format for the device
-	dataColour = '21ff' + colour
-	dataColour = dataColour + '0000000000000000000000000000000000000000000000000000000000000000000000000000'
-	#sending the colour data to the device
-	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(dataColour))
+def set_static_multi_color_SSA3TKL(dev, dev_params, brightness, color):
+	print("Setting a static color...")
+	bmRequestType = dev_params[5]
+	bmRequest = dev_params[6]
+	wValue = dev_params[7]
+	wIndex = dev_params[8]
+	#inserting the color value into the correct format for the device
+	data_color = '21ff' + color
+	data_color = data_color + '0000000000000000000000000000000000000000000000000000000000000000000000000000'
+	#sending the color data to the device
+	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data_color))
 	#inserting the brightness value into the correct format for the device
-	dataBrightness = '23' + str(brightness).zfill(2)
-	dataBrightness = dataBrightness + '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+	data_brightness = '23' + str(brightness).zfill(2)
+	data_brightness = data_brightness + '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 	#sending the brightness data to the device
-	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(dataBrightness))
+	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data_brightness))
 	print("Data has been sent!")
 
-def setRainbowWave_SSA3TKL(dev, devParams, brightness):
+def set_rainbow_wave_SSA3TKL(dev, dev_params, brightness):
 	print("Setting a rainbow wave...")
-	bmRequestType = devParams[5]
-	bmRequest = devParams[6]
-	wValue = devParams[7]
-	wIndex = devParams[8]
+	bmRequestType = dev_params[5]
+	bmRequest = dev_params[6]
+	wValue = dev_params[7]
+	wIndex = dev_params[8]
 	#inserting the rainbow wave into the correct format for the device
-	dataColour = '22ff' + '0000' + '0000'
-	dataColour = dataColour + '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-	#sending the colour data to the device
-	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(dataColour))
-	dataBrightness = '23' + str(brightness).zfill(2)
-	dataBrightness = dataBrightness + '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(dataBrightness))
+	data_color = '22ff' + '0000' + '0000'
+	data_color = data_color + '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+	#sending the color data to the device
+	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data_color))
+	data_brightness = '23' + str(brightness).zfill(2)
+	data_brightness = data_brightness + '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+	dev.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data_brightness))
 	print("Data has been sent!")
 
-def getUserInput_mode():
+def get_user_input_mode():
 	while True:
 		try:
 			print("The following modes are available:")
-			print("1: Single static colour.")
-			print("2: Multi-zone static colours.")
+			print("1: Single static color.")
+			print("2: Multi-zone static colors.")
 			print("3: Rainbow wave.")
 			mode = int(input("Enter the mode: "))
 			if mode in [1,2,3]:
@@ -116,7 +111,7 @@ def getUserInput_mode():
 			continue
 	return mode
 
-def getUserInput_brightness():	
+def get_user_input_brightness():	
 	while True:
 		try:
 			brightness = int(input("Enter the integer for the backlight brightness from 0 - 10: "))
@@ -126,71 +121,71 @@ def getUserInput_brightness():
 			continue
 	return brightness
 
-def getUserInput_colour():
+def get_user_input_color():
 	while True:
 		try:
-			colour = str(input("Enter the hex value for the backlight colour: "))
-			if len(colour) == 6:
+			color = str(input("Enter the hex value for the backlight color: "))
+			if len(color) == 6:
 				break
 		except ValueError:
 			continue
-	return colour	
+	return color	
 
-def selectDevice():
+def select_device():
 	devs = usb.core.find(find_all=True)
 	if devs is None:
 		raise ValueError("No devices were found.")
 	else:
 		print("The following connected devices are supported by this software:")
-	supportedDevicesConnected = []
+	supported_devices_connected = []
 	i = 0
 	for cfg in devs:
-		for supportedDevice in supportedDevices:
-			if (cfg.idVendor == supportedDevice[1]) and (cfg.idProduct == supportedDevice[3]):
+		for supported_device in supported_devices:
+			if (cfg.idVendor == supported_device[1]) and (cfg.idProduct == supported_device[3]):
 				i = i + 1
-				print(f"{i}: {supportedDevice[0]} {supportedDevice[2]}")
-				supportedDevicesConnected.append(supportedDevice) 
+				print(f"{i}: {supported_device[0]} {supported_device[2]}")
+				supported_devices_connected.append(supported_device) 
 	selectedDevice = int(input("Select which device you wish to control: "))
 	time.sleep(1)
-	dev = findDev(supportedDevicesConnected[selectedDevice-1][1], supportedDevicesConnected[selectedDevice-1][3])
-	return dev, supportedDevicesConnected[selectedDevice-1]
+	dev = find_dev(supported_devices_connected[selectedDevice-1][1], supported_devices_connected[selectedDevice-1][3])
+	return dev, supported_devices_connected[selectedDevice-1]
 					
-def default():
-	dev = findDev(0x1038, 0x1622)
-	detachDeviceDriver(dev, deviceParams_default[4])
-	setStaticSingleColour_SSA3TKL(dev, deviceParams_default, brightness_default, colour_default)
+def default(brightness, color):
+	dev = find_dev(0x1038, 0x1622)
+	device_params_default = supported_devices[1]
+	detach_device_driver(dev, device_params_default[4])
+	set_static_single_color_SSA3TKL(dev, device_params_default, brightness, color)
 	usb.util.dispose_resources(dev)
-	attachDeviceDriver(dev, deviceParams_default[4])
-	sys.exit()
+	attach_device_driver(dev, device_params_default[4])
 	
 def main():
 	print("Welcome to an RGB controller written in Python!")
 	
-	dev, devParams = selectDevice()
+	dev, dev_params = select_device()
 
 	#Must ensure the device is not attached otherwise an error will be raised (resource busy)
-	#Only need to pass bInterfaceNumber, hence not passing the entire list for devParams
-	detachDeviceDriver(dev, devParams[4])
+	#Only need to pass bInterfaceNumber, hence not passing the entire list for dev_params
+	detach_device_driver(dev, dev_params[4])
 	
-	mode = getUserInput_mode()
-	brightness = getUserInput_brightness()
+	mode = get_user_input_mode()
+	brightness = get_user_input_brightness()
 	
 	if mode == 1:
-		colour = getUserInput_colour()
-		setStaticSingleColour_SSA3TKL(dev, devParams, brightness, colour)
+		color = get_user_input_color()
+		set_static_single_color_SSA3TKL(dev, dev_params, brightness, color)
 	elif mode == 2:
-		colour = ''
+		color = ''
 		for i in range(8):
-			colour = colour + getUserInput_colour()
-		setStaticMultiColour_SSA3TKL(dev, devParams, brightness, colour)
+			color = color + get_user_input_color()
+		set_static_multi_color_SSA3TKL(dev, dev_params, brightness, color)
 	elif mode == 3:
-		setRainbowWave_SSA3TKL(dev, devParams, brightness)
+		set_rainbow_wave_SSA3TKL(dev, dev_params, brightness)
 			
 	#free up the device resource to proceed.
 	usb.util.dispose_resources(dev)
 	
 	#re-attaching the device to allow other programs to control it.
-	attachDeviceDriver(dev,devParams[4])
+	attach_device_driver(dev,dev_params[4])
 	
 	sys.exit()
 	
