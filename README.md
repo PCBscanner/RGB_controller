@@ -35,7 +35,7 @@ Selecting the device then brings up the modes supported, such a single static co
 Brightness and colours are then specified.
 
 ## Shortcut Mode
-A default mode has been added as a separate function, and allows it to be run using a keyboard shortcut without user prompts. This was included because - on my system anyway - the SteelSeries Apex 3 TKL resets to the rainbow wave when waking the computer. An example shortcut to run this would be:
+The external_input function can be used to set a colour directly, for example via a custom keyboard shortcut. This was included because - on my system anyway - the SteelSeries Apex 3 TKL resets to the rainbow wave when waking the computer. An example shortcut to run this with a white backlight at full brightness would be:
 ```
 $ cd /path/to/script; python -c 'import RGB_controller; RGB_controller.external_input(10, "ffffff")'
 ```
