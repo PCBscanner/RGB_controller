@@ -131,7 +131,7 @@ def get_user_input_color():
 			continue
 	return color	
 
-def select_device():
+def scan_devices():
 	devs = usb.core.find(find_all=True)
 	if devs is None:
 		raise ValueError("No devices were found.")
@@ -144,7 +144,11 @@ def select_device():
 			if (cfg.idVendor == supported_device[1]) and (cfg.idProduct == supported_device[3]):
 				i = i + 1
 				print(f"{i}: {supported_device[0]} {supported_device[2]}")
-				supported_devices_connected.append(supported_device) 
+				supported_devices_connected.append(supported_device)
+	return supported_devices_connected
+
+def select_device():
+	supported_devices_connected = scan_devices()
 	selectedDevice = int(input("Select which device you wish to control: "))
 	dev = find_dev(supported_devices_connected[selectedDevice-1][1], supported_devices_connected[selectedDevice-1][3])
 	return dev, supported_devices_connected[selectedDevice-1]
@@ -165,11 +169,11 @@ def external_input(brightness, color, mode):
 def main():
 	print("Welcome to an RGB controller written in Python!")
 	
-	dev, ddevice_params = select_device()
+	dev, device_params = select_device()
 
 	#Must ensure the device is not attached otherwise an error will be raised (resource busy)
 	#Only need to pass bInterfaceNumber, hence not passing the entire list for dev_params
-	detach_device_driver(dev, dev_params[4])
+	detach_device_driver(dev, device_params[4])
 	
 	mode = get_user_input_mode()
 	brightness = get_user_input_brightness()

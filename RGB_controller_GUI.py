@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.colorchooser import askcolor
+from tkinter import messagebox
 import RGB_controller
 
 def create_input_frame(container):
@@ -35,7 +36,9 @@ def create_input_frame(container):
 	row_var = row_var+1
 	selected_mode.set(1)
 	
-	ttk.Button(frame, text='Update RGB', command=lambda: RGB_controller.external_input(brightness_entry.get(), color_entry.get(), int(selected_mode.get()))).grid(row=row_var, columnspan=3)
+	ttk.Button(frame, text='Update RGB', command=lambda: RGB_controller.external_input(brightness_entry.get(), color_entry.get(), int(selected_mode.get()))).grid(row=row_var, column=1)
+	
+	ttk.Button(frame, text='Scan for devices', command=lambda: scan_devices_popup()).grid(row=row_var, column=0)
 	
 	for widget in frame.winfo_children():
 		widget.grid(padx=5, pady=5)
@@ -46,6 +49,13 @@ def select_color(color_entry):
 	color = askcolor(title="Tkinter color chooser")
 	color_entry.delete(0, 'end')
 	color_entry.insert(0, color[1][1:])
+
+def scan_devices_popup():
+	supported_devices_connected = RGB_controller.scan_devices()
+	if supported_devices_connected == []:
+		messagebox.showerror('Error', 'No supported devices were found.')
+	else:
+		messagebox.showinfo('Device(s) found', 'One or more supported devices were found.')
 
 def create_main_window():
 	root = tk.Tk()
