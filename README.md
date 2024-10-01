@@ -2,6 +2,7 @@
 This is a program written in Python to control the RGB lighting of devices.
 [PyUSB](https://github.com/pyusb/pyusb) was chosen to send serial commands to the devices.
 The motivation was for me to understand more about how USB communication works, and involved reverse engineering the propietary software using a USB packet capturing program.
+I have started with supporting the SteelSeries Apex 3 TKL because it is the keyboard I am using. I've tried to futureproof the code somewhat to add additional devices in the future if and when I need to.
 
 # Supported Devices
 * SteelSeries Apex 3 TKL.
