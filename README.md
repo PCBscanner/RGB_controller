@@ -15,6 +15,8 @@ You must have the following installed to run certain parts of the program:
 * Controller: [PyUSB](https://github.com/pyusb/pyusb).
 * GUI: [Tkinter](https://docs.python.org/3/library/tkinter.html).
 
+You must either run the code as root, or set up custom udev rules for individual devices that you wish to control. Please see [this discussion](https://stackoverflow.com/questions/31992058/how-can-i-comunicate-with-this-device-using-pyusb/31994168#31994168) for guidance.
+
 # Usage
 ## GUI (Standard)
 The recommended way to run this program is using the GUI:
